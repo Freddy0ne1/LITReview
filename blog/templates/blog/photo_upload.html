@@ -1,0 +1,97 @@
+{% extends "core/base.html" %}
+{% block title %}Uploader une photo | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Télécharger une photo</h1>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+
+        <!-- Affichage des erreurs -->
+        {% if form.errors %}
+            <div role="alert" class="mb-4 p-3 bg-red-100 text-red-900 rounded border-l-4 border-red-700">
+                <p class="font-semibold mb-2">
+                    <span aria-hidden="true">⚠️</span> Erreurs dans le formulaire :
+                </p>
+                <ul class="list-disc list-inside">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Formulaire d'upload -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Champ : Image -->
+            <div class="mb-4">
+                <label for="id_image" class="block text-gray-900 font-semibold mb-2">
+                    Image
+                </label>
+
+                {{ form.image }}
+
+                {% if form.image.help_text %}
+                    <p class="mt-1 text-sm text-gray-700">{{ form.image.help_text }}</p>
+                {% endif %}
+
+                {% if form.image.errors %}
+                    <p class="mt-1 text-sm text-red-900" role="alert">
+                        {{ form.image.errors|first }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Champ : Légende -->
+            <div class="mb-4">
+                <label for="id_caption" class="block text-gray-900 font-semibold mb-2">
+                    Légende
+                </label>
+
+                {{ form.caption }}
+
+                {% if form.caption.help_text %}
+                    <p class="mt-1 text-sm text-gray-700">{{ form.caption.help_text }}</p>
+                {% endif %}
+
+                {% if form.caption.errors %}
+                    <p class="mt-1 text-sm text-red-900" role="alert">
+                        {{ form.caption.errors|first }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button
+                    type="submit"
+                    class="flex-1 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                >
+                    Publier
+                </button>
+
+                <a
+                    href="{% url 'feed' %}"
+                    class="flex-1 text-center bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:outline-none text-gray-900 font-semibold py-3 px-6 rounded-lg transition duration-200"
+                >
+                    Annuler
+                </a>
+            </div>
+        </form>
+
+        <!-- Conseil utilisateur -->
+        <div class="mt-6 p-3 bg-blue-50 rounded border-l-4 border-blue-600">
+            <p class="text-sm text-blue-900">
+                <strong><span aria-hidden="true">💡</span> Conseil :</strong> Ajoutez une légende descriptive pour aider les autres utilisateurs à comprendre votre photo.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

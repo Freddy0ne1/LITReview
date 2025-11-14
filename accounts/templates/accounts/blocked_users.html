@@ -1,0 +1,66 @@
+{% extends "core/base.html" %}
+{% block title %}Utilisateurs bloqués | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Utilisateurs bloqués</h1>
+
+    {% if blocked_users %}
+        <div class="space-y-4">
+            {% for block in blocked_users %}
+                <div class="bg-white rounded-lg shadow-md p-4 flex items-center justify-between hover:shadow-lg transition-shadow duration-200">
+
+                    <!-- Informations utilisateur -->
+                    <div class="flex items-center gap-3">
+                        {% if block.blocked_user.profile_photo %}
+                            <img
+                                src="{{ block.blocked_user.profile_photo.url }}"
+                                alt="Photo de profil de {{ block.blocked_user.username }}"
+                                class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 grayscale"
+                            >
+                        {% else %}
+                            <div
+                                class="w-12 h-12 rounded-full bg-gray-400 text-white flex items-center justify-center font-bold text-lg"
+                                aria-hidden="true"
+                            >
+                                {{ block.blocked_user.username|first|upper }}
+                            </div>
+                        {% endif %}
+
+                        <div>
+                            <p class="font-semibold text-gray-900 text-lg">
+                                {{ block.blocked_user.username }}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                Bloqué le {{ block.created_at|date:"d/m/Y" }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bouton Débloquer -->
+                    <button
+                        type="button"
+                        onclick="openUnblockModal('{{ block.blocked_user.id }}', '{{ block.blocked_user.username }}')"
+                        class="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 focus:outline-none text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+                        aria-label="Débloquer {{ block.blocked_user.username }}"
+                    >
+                        Débloquer
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+            <p class="text-blue-900">
+                <span aria-hidden="true">✅</span> Vous n'avez bloqué aucun utilisateur.
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Inclusion de la modale de confirmation -->
+{% include 'accounts/includes/unblock_modal.html' %}
+
+{% endblock %}

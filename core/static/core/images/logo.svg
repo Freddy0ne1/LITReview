@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="833" height="250" viewBox="0 0 833 250">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 116.417px;
+        text-anchor: middle;
+        fill: #1f2937;
+        font-family: Arial;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        fill: #3b82f6;
+      }
+
+      .cls-3 {
+        fill: #008235;
+      }
+    </style>
+  </defs>
+  <text id="LITReview" class="cls-1" x="505.13" y="168.375"><tspan x="505.13">LIT<tspan class="cls-2">Rev<tspan class="cls-3">iew</tspan></tspan></tspan></text>
+  <image id="livrebas" x="55" y="145" width="119" height="21" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHcAAAAVCAYAAAB8BXHbAAABNElEQVRogWJkaDL9zzAKhh9gYGAAAAAA//9iGo3WYQoYGBgAAAAA//8ajdzhChgYGAAAAAD//xqN3OEKGBgYAAAAAP//Go3c4QoYGBgAAAAA//8ajdzhChgYGAAAAAD//xqN3OEKGBgYAAAAAP//Go3c4QoYGBgAAAAA//8ajdzhChgYGAAAAAD//xqN3OEKGBgYAAAAAP//Go3c4QoYGBgAAAAA//8ajdzhChgYGAAAAAD//xqN3OEKGBgYAAAAAP//Go3c4QoYGBgAAAAA//8ajdzhChgYGAAAAAD//xqN3OEKGBgYAAAAAP//Go3c4QoYGBgAAAAA//8ajdzhChgYGAAAAAD//xqN3OEKGBgYAAAAAP//Go3c4QoYGBgAAAAA//8ajdzhChgYGAAAAAD//wMATccB4Hqnc4AAAAAASUVORK5CYII="/>
+  <image id="livremilieu" x="64" y="117" width="110" height="20" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG4AAAAUCAYAAABs4ghcAAABJklEQVRogWJUTX79n2EUDC3AwPAEAAAA//9iGo2yIQgYGBgAAAAA//8ajbihCBgYGAAAAAD//xqNuKEIGBgYAAAAAP//Go24oQgYGBgAAAAA//8ajbihCBgYGAAAAAD//xqNuKEIGBgYAAAAAP//Go24oQgYGBgAAAAA//8ajbihCBgYGAAAAAD//xqNuKEIGBgYAAAAAP//Go24oQgYGBgAAAAA//8ajbihCBgYGAAAAAD//xqNuKEIGBgYAAAAAP//Go24oQgYGBgAAAAA//8ajbihCBgYGAAAAAD//xqNuKEIGBgYAAAAAP//Go24oQgYGBgAAAAA//8ajbihCBgYGAAAAAD//xqNuKEIGBgYAAAAAP//Go24oQgYGBgAAAAA//8DADnAA36L8111AAAAAElFTkSuQmCC"/>
+  <image id="livrehaut" x="60" y="88" width="114" height="21" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHIAAAAVCAYAAACaLLqfAAABOElEQVRogWJMWPrrDwMDAzPDKBi6gIHhLwAAAP//YhqNvmEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8ajcjhABgYGAAAAAD//xqNyOEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8ajcjhABgYGAAAAAD//xqNyOEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8ajcjhABgYGAAAAAD//xqNyOEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8ajcjhABgYGAAAAAD//xqNyOEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8ajcjhABgYGAAAAAD//xqNyOEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8ajcjhABgYGAAAAAD//xqNyOEAGBgYAAAAAP//Go3I4QAYGBgAAAAA//8DAK7PBCXNcLBLAAAAAElFTkSuQmCC"/>
+</svg>

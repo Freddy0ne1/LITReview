@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+{% block title %}LITReview | La critique collaborative{% endblock %}
+
+{% block content %}
+
+<!-- Bannière d'accueil -->
+<div class="max-w-4xl mx-auto text-center py-16">
+
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        Partagez vos lectures, découvrez de nouvelles pépites
+    </h1>
+
+    <p class="text-lg md:text-xl text-gray-900 mb-12 leading-relaxed">
+        Publiez vos critiques de livres et d'articles, demandez l'avis de la communauté sur vos prochaines lectures, et trouvez l'inspiration grâce aux recommandations des autres lecteurs.
+    </p>
+
+    <!-- Boutons d'action -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-8 rounded-lg transition duration-200">
+            Se connecter
+        </a>
+
+        <a href="{% url 'signup' %}" class="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-8 rounded-lg transition duration-200">
+            S'inscrire
+        </a>
+    </div>
+</div>
+
+<!-- Section des fonctionnalités -->
+<div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 mt-16">
+
+    <!-- Carte 1 : Publier des critiques -->
+    <div class="text-center p-6">
+        <div class="text-4xl mb-4" aria-hidden="true">✍️</div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Publiez vos critiques</h2>
+        <p class="text-gray-900">Partagez votre avis sur vos lectures préférées</p>
+    </div>
+
+    <!-- Carte 2 : Demander des avis -->
+    <div class="text-center p-6">
+        <div class="text-4xl mb-4" aria-hidden="true">💬</div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Demandez des avis</h2>
+        <p class="text-gray-900">Sollicitez des recommandations de la communauté</p>
+    </div>
+
+    <!-- Carte 3 : Découvrir des lectures -->
+    <div class="text-center p-6">
+        <div class="text-4xl mb-4" aria-hidden="true">📚</div>
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">Découvrez</h2>
+        <p class="text-gray-900">Trouvez votre prochaine lecture coup de cœur</p>
+    </div>
+</div>
+
+{% endblock %}

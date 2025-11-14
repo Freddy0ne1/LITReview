@@ -1,0 +1,131 @@
+{% extends "core/base.html" %}
+{% block title %}Demander une critique | LITReview{% endblock %}
+
+{% block content %}
+
+<!-- Conteneur principal centré -->
+<div class="max-w-3xl mx-auto">
+    
+    <!-- Titre de la page 
+         ✅ WCAG : <h1> car c'est le titre principal -->
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Demander une critique</h1>
+
+    <!-- Carte du formulaire -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        
+        <!-- Affichage des erreurs du formulaire 
+             ✅ WCAG : role="alert" annonce les erreurs aux lecteurs d'écran
+             ✅ WCAG : Icône + bordure + texte (pas seulement la couleur) -->
+        {% if form.errors %}
+            <div role="alert" class="mb-6 p-4 bg-red-100 text-red-900 rounded-lg border-l-4 border-red-700">
+                <p class="font-semibold mb-2">
+                    ⚠️ Erreurs dans le formulaire :
+                </p>
+                <ul class="list-disc list-inside space-y-1">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        <!-- Formulaire de demande de critique
+             ✅ CRITICAL : enctype="multipart/form-data" est OBLIGATOIRE pour uploader des fichiers
+             Sans cela, les fichiers ne seront PAS envoyés au serveur -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            
+            <!-- Token de sécurité Django (obligatoire pour tous les formulaires POST) -->
+            {% csrf_token %}
+            
+            <!-- Champ titre -->
+            <div>
+                <!-- Label du champ titre
+                     ✅ WCAG : for= associe le label au champ (accessibilité) -->
+                <label for="id_title" class="block text-gray-900 font-semibold mb-2">
+                    Titre de la demande
+                </label>
+                
+                <!-- Widget input généré par Django avec les styles de forms.py -->
+                {{ form.title }}
+                
+                <!-- Texte d'aide (si défini dans le formulaire) -->
+                {% if form.title.help_text %}
+                    <p class="mt-1 text-sm text-gray-700">{{ form.title.help_text }}</p>
+                {% endif %}
+                
+                <!-- Messages d'erreur pour ce champ spécifique
+                     ✅ WCAG : Texte rouge foncé pour bon contraste -->
+                {% if form.title.errors %}
+                    <p class="mt-1 text-sm text-red-900">{{ form.title.errors|first }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Champ description -->
+            <div>
+                <label for="id_description" class="block text-gray-900 font-semibold mb-2">
+                    Description
+                </label>
+                
+                <!-- Widget textarea généré par Django -->
+                {{ form.description }}
+                
+                {% if form.description.help_text %}
+                    <p class="mt-1 text-sm text-gray-700">{{ form.description.help_text }}</p>
+                {% endif %}
+                
+                {% if form.description.errors %}
+                    <p class="mt-1 text-sm text-red-900">{{ form.description.errors|first }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Champ image (optionnel) -->
+            <div>
+                <label for="id_image" class="block text-gray-900 font-semibold mb-2">
+                    Image (optionnel)
+                </label>
+                
+                <!-- Widget de sélection de fichier généré par Django -->
+                {{ form.image }}
+                
+                {% if form.image.help_text %}
+                    <p class="mt-1 text-sm text-gray-700">{{ form.image.help_text }}</p>
+                {% endif %}
+                
+                {% if form.image.errors %}
+                    <p class="mt-1 text-sm text-red-900">{{ form.image.errors|first }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Boutons d'action
+                 flex-col : empilés verticalement sur mobile
+                 sm:flex-row : côte à côte sur tablette/desktop -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <!-- Bouton de soumission 
+                     ✅ WCAG : focus : ring-4 = bordure visible quand on navigue au clavier
+                     ✅ WCAG : cursor-pointer = main au survol pour meilleure UX -->
+                <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 focus:outline-none text-white font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                    Envoyer la demande
+                </button>
+                
+                <!-- Bouton d'annulation (retour au flux)
+                     ✅ WCAG : focus : ring-4 = bordure visible au clavier
+                     ✅ WCAG : cursor-pointer = main au survol -->
+                <a href="{% url 'feed' %}" class="flex-1 text-center bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:outline-none text-gray-900 font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                    Annuler
+                </a>
+            </div>
+        </form>
+
+        <!-- Information d'aide
+             ✅ WCAG : Fond orange avec bordure pour distinguer l'information -->
+        <div class="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-600">
+            <p class="text-sm text-green-900">
+                <strong>💡 Conseil :</strong> Plus votre demande est précise et détaillée, plus vous recevrez des critiques pertinentes et utiles. N'hésitez pas à préciser vos attentes, vos questions spécifiques et le contexte de votre lecture.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
