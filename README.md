@@ -61,8 +61,8 @@ npm --version
 #### 2. Cloner le projet
 
 ```bash
-git clone https://github.com/Freddy0ne1/LITReview.git
-cd LITReview
+git clone https://github.com/Freddy0ne1/LITReview
+
 ```
 
 ---
