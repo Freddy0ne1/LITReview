@@ -53,7 +53,7 @@ def ticket_create(request):
             ticket.user = request.user
             ticket.save()
 
-            messages.success(request, "✓ Votre demande de critique a été publiée avec succès !")
+            messages.success(request, "Votre demande de critique a été publiée avec succès !")
             return redirect("feed")
         else:
             messages.error(request, "Veuillez corriger les erreurs ci-dessous.")

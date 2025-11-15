@@ -97,15 +97,15 @@
                 </h2>
 
                 <!-- Champ : Note (radio buttons) -->
-                <fieldset class="mb-6">
+                <fieldset>
                     <legend class="block text-gray-900 font-semibold mb-3">
                         Note
                     </legend>
-                    <div class="space-y-2">
+                    <div class="flex flex-wrap gap-3">
                         {% for choice in review_form.rating %}
-                            <div class="flex items-center">
+                            <div class="flex items-center bg-gray-100 hover:bg-blue-50 px-4 py-2 rounded-lg border-2 border-gray-300 hover:border-blue-500 transition cursor-pointer">
                                 {{ choice.tag }}
-                                <label for="{{ choice.id_for_label }}" class="ml-3 text-gray-900 cursor-pointer">
+                                <label for="{{ choice.id_for_label }}" class="ml-2 text-gray-900 cursor-pointer font-medium">
                                     {{ choice.choice_label }}
                                 </label>
                             </div>
@@ -119,7 +119,7 @@
                 </fieldset>
 
                 <!-- Champ : Titre de la critique -->
-                <div class="mb-4">
+                <div class="mb-4 mt-4">
                     <label for="id_headline" class="block text-gray-900 font-semibold mb-2">
                         Titre de votre critique
                     </label>

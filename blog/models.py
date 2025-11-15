@@ -201,12 +201,12 @@ class Review(models.Model):
 
     # Choix pour la note
     RATING_CHOICES = [
-        (0, '0 - Aucune étoile'),
-        (1, '1 - ★'),
-        (2, '2 - ★★'),
-        (3, '3 - ★★★'),
-        (4, '4 - ★★★★'),
-        (5, '5 - ★★★★★'),
+        (0, "0 - Aucune étoile"),
+        (1, "1 - ★"),
+        (2, "2 - ★★"),
+        (3, "3 - ★★★"),
+        (4, "4 - ★★★★"),
+        (5, "5 - ★★★★★"),
     ]
 
     # Ticket auquel cette critique répond

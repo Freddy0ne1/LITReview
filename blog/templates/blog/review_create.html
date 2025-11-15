@@ -11,21 +11,24 @@
     <!-- Affichage du ticket en réponse -->
     <article class="bg-gray-50 rounded-lg border-2 border-gray-300 p-6 mb-8">
         <p class="text-sm text-gray-600 mb-2">Vous êtes en train de poster en réponse à</p>
-
-        <p class="text-xl text-gray-900 mb-3">{{ ticket.user }} a demandé une critique {{ time_created }}</p>
-
-        <p class="text-xl font-bold text-gray-900 mb-3">{{ ticket.title }}</p>
-
-        <p class="text-gray-700 whitespace-pre-line">{{ ticket.description }}</p>
-
-        {% if ticket.image %}
-            <div class="mt-4">
-                <img
-                    src="{{ ticket.image.url }}"
-                    alt="Couverture du livre : {{ ticket.title }}"
-                    class="w-48 rounded-lg"
-                >
+        <div class="bg-blue-100 p-6 mb-4 rounded-lg border-gray-300">
+            <div class="flex items-center justify-between border-gray-300">
+                <p class="text-md text-gray-900 mb-3">{{ ticket.user }} a demandé une critique</p>
+                <p class="text-md text-gray-900 mb-3">{{ ticket.time_created }}</p>
             </div>
+            <p class="text-xl font-bold text-gray-900 mb-3">{{ ticket.title }}</p>
+
+            <p class="text-gray-700 whitespace-pre-line">{{ ticket.description }}</p>
+
+            {% if ticket.image %}
+                <div class="mt-4">
+                    <img
+                        src="{{ ticket.image.url }}"
+                        alt="Couverture du livre : {{ ticket.title }}"
+                        class="w-48 rounded-lg"
+                    >
+                </div>
+        </div>
         {% endif %}
 
     </article>
@@ -61,11 +64,11 @@
                 <legend class="block text-gray-900 font-semibold mb-3">
                     Note
                 </legend>
-                <div class="space-y-2">
+                <div class="flex flex-wrap gap-3">
                     {% for choice in review_form.rating %}
-                        <div class="flex items-center">
+                        <div class="flex items-center bg-gray-100 hover:bg-blue-50 px-4 py-2 rounded-lg border-2 border-gray-300 hover:border-blue-500 transition cursor-pointer">
                             {{ choice.tag }}
-                            <label for="{{ choice.id_for_label }}" class="ml-3 text-gray-900 cursor-pointer">
+                            <label for="{{ choice.id_for_label }}" class="ml-2 text-gray-900 cursor-pointer font-medium">
                                 {{ choice.choice_label }}
                             </label>
                         </div>

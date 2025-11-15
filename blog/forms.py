@@ -119,11 +119,11 @@ class BlogForm(forms.ModelForm):
         })
 
         # Labels et aides
-        self.fields['title'].label = "Titre de la critique"
-        self.fields['content'].label = "Votre critique"
-        self.fields['title'].help_text = "Donnez un titre accrocheur à votre critique (max 200 caractères)."
+        self.fields["title"].label = "Titre de la critique"
+        self.fields["content"].label = "Votre critique"
+        self.fields["title"].help_text = "Donnez un titre accrocheur à votre critique (max 200 caractères)."
         self.fields[
-            'content'].help_text = "Développez votre avis, vos impressions et vos recommandations (max 5000 caractères)."
+            "content"].help_text = "Développez votre avis, vos impressions et vos recommandations (max 5000 caractères)."
 
 
 class DeleteBlogForm(forms.Form):
@@ -143,18 +143,18 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = models.Review
-        fields = ['headline', 'rating', 'body']
+        fields = ["headline", "rating", "body"]
 
         # Widget RadioSelect pour la note en étoiles
         widgets = {
-            'rating': forms.RadioSelect(
+            "rating": forms.RadioSelect(
                 choices=[
-                    (0, '0 - Aucune étoile'),
-                    (1, '1 - ★'),
-                    (2, '2 - ★★'),
-                    (3, '3 - ★★★'),
-                    (4, '4 - ★★★★'),
-                    (5, '5 - ★★★★★'),
+                    (0, "- 0"),
+                    (1, "- 1"),
+                    (2, "- 2"),
+                    (3, "- 3"),
+                    (4, "- 4"),
+                    (5, "- 5"),
                 ]
             )
         }
@@ -163,22 +163,22 @@ class ReviewForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # Personnalisation du titre de la critique
-        self.fields['headline'].widget.attrs.update({
-            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-            'placeholder': 'Titre de votre critique'
+        self.fields["headline"].widget.attrs.update({
+            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+            "placeholder": "Titre de votre critique"
         })
 
         # Personnalisation du contenu de la critique
-        self.fields['body'].widget.attrs.update({
-            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-            'placeholder': 'Partagez votre avis détaillé...',
-            'rows': 10
+        self.fields["body"].widget.attrs.update({
+            "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+            "placeholder": "Partagez votre avis détaillé...",
+            "rows": 10
         })
 
         # Labels
-        self.fields['headline'].label = "Titre de votre critique"
-        self.fields['rating'].label = "Note"
-        self.fields['body'].label = "Votre avis détaillé"
+        self.fields["headline"].label = "Titre de votre critique"
+        self.fields["rating"].label = "Note"
+        self.fields["body"].label = "Votre avis détaillé"
 
 
 class DeleteReviewForm(forms.Form):
