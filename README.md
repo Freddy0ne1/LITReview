@@ -45,20 +45,10 @@
 
 ### Étapes d'installation
 
-#### 1. Installer Node.js
-
-Téléchargez et installez Node.js depuis le site officiel :  
-👉 **https://nodejs.org/fr/download**
-
-Vérifiez l'installation :
-```bash
-node --version
-npm --version
-```
 
 ---
 
-#### 2. Cloner le projet
+#### 1. Cloner le projet
 
 ```bash
 git clone https://github.com/Freddy0ne1/LITReview
@@ -67,7 +57,7 @@ git clone https://github.com/Freddy0ne1/LITReview
 
 ---
 
-#### 3. Créer un environnement virtuel
+#### 2. Créer un environnement virtuel
 
 **Windows :**
 ```bash
@@ -89,7 +79,7 @@ source env/bin/activate
 
 ---
 
-#### 4. Installer les dépendances Python
+#### 3. Installer les dépendances Python
 
 ```bash
 pip install -r requirements.txt
@@ -98,7 +88,7 @@ pip install -r requirements.txt
 
 ---
 
-#### 5. Créer un superutilisateur (optionnel)
+#### 4. Créer un superutilisateur (optionnel)
 
 Pour accéder à l'interface d'administration Django :
 
@@ -110,90 +100,16 @@ Suivez les instructions pour créer votre compte administrateur.
 
 ---
 
-#### 6. Installer les dépendances Tailwind CSS
+#### 5. Lancer le serveur Django
 
-```bash
-python manage.py tailwind install
-```
 
-**⚠️ Si vous obtenez une erreur** du type :
-```
-CommandError: 
-It looks like node.js and/or npm is not installed or cannot be found.
-```
-
-**Solution :** Configurez le chemin vers npm dans `config/settings.py`
-
-##### 7a. Trouvez le chemin d'installation de npm
-
-**Windows :**
-```bash
-where npm
-```
-
-**macOS/Linux :**
-```bash
-which npm
-```
-
-##### 7b. Modifiez `config/settings.py`
-
-Allez en bas du fichier et décommentez/modifiez la ligne appropriée :
-
-```python
-# En cas d'erreur pour la détection de Node.js (Windows)
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
-
-# En cas d'erreur pour la détection de Node.js (Mac et Linux)
-# NPM_BIN_PATH = "/usr/local/bin/npm"
-```
-
-##### 7c. Relancez l'installation
-
-```bash
-python manage.py tailwind install
-```
-
----
-
-#### 8. Lancer le serveur de développement Tailwind
-
-⚠️ **Important** : Gardez ce terminal ouvert pendant tout le développement
-
-```bash
-python manage.py tailwind start
-```
-
-Vous devriez voir :
-```
---watch
-```
-
----
-
-#### 9. Lancer le serveur Django
-
-⚠️ **Important** : Ouvrez un **NOUVEAU terminal**, activez l'environnement virtuel, puis lancez :
-
-**Windows :**
-```bash
-env\Scripts\activate
-```
-```bash
-python manage.py runserver
-```
-
-**macOS/Linux :**
-```bash
-source env/bin/activate
-```
 ```bash
 python manage.py runserver
 ```
 
 ---
 
-#### 10. Accéder à l'application
+#### 6. Accéder à l'application
 
 Ouvrez votre navigateur et allez sur :  
 👉 **http://127.0.0.1:8000**
