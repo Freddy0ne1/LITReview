@@ -1,0 +1,318 @@
+{% extends "core/base.html" %}
+{% block title %}Vos posts | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Vos posts</h1>
+
+    <p class="text-lg text-gray-700 mb-8">
+        Retrouvez tous vos tickets et critiques, {{ user.username }} !
+    </p>
+
+    <!-- Section 1 : Vos tickets -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span aria-hidden="true">💬</span> Vos demandes de critique ({{ user_tickets.count }})
+        </h2>
+
+        {% if user_tickets %}
+            <div class="space-y-6 bg-green-50 border-l-4 border-green-600 rounded-lg shadow-md p-6">
+                {% for ticket in user_tickets %}
+                    <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+
+                        <!-- En-tête -->
+                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+                            <div class="flex items-center gap-3">
+                                <!-- Avatar -->
+                                {% if user.profile_photo %}
+                                    <img
+                                        src="{{ user.profile_photo.url }}"
+                                        alt="Photo de profil de {{ user.username }}"
+                                        class="w-10 h-10 rounded-full object-cover border-2 border-gray-200">
+                                {% else %}
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-bold"
+                                        aria-label="Avatar de {{ user.username }}">
+                                        {{ user.username|first|upper }}
+                                    </div>
+                                {% endif %}
+
+                                <div>
+                                    <p class="font-semibold text-blue-600">Vous</p>
+                                    <p class="text-sm text-gray-600">avez demandé une critique</p>
+                                </div>
+                            </div>
+
+                            <time datetime="{{ ticket.time_created|date:'Y-m-d' }}" class="text-sm text-gray-600">
+                                {{ ticket.time_created|date:"d/m/Y à H:i" }}
+                            </time>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">
+                            {{ ticket.title }}
+                        </h3>
+
+                        <p class="text-gray-700 mb-4 whitespace-pre-line">
+                            {{ ticket.description }}
+                        </p>
+
+                        {% if ticket.image %}
+                            <div class="mb-4">
+                                <img
+                                    src="{{ ticket.image.url }}"
+                                    alt="Couverture du livre : {{ ticket.title }}"
+                                    class="w-full max-w-sm rounded-lg object-cover">
+                            </div>
+                        {% endif %}
+
+                        <!-- Boutons d'action -->
+                        <div class="flex items-center justify-end gap-4">
+
+                            <a href="{% url 'edit_ticket' ticket.id %}"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold focus:ring-2 focus:ring-blue-300 focus:outline-none rounded-lg px-6 py-2 transition duration-200"
+                                aria-label="Modifier le ticket : {{ ticket.title }}">
+                                <span aria-hidden="true">✏️</span> Modifier
+                            </a>
+
+                            <button
+                                type="button"
+                                onclick="openDeleteTicketModal('{{ ticket.id }}', '{{ ticket.title|escapejs }}')"
+                                class="bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 focus:outline-none text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
+                                aria-label="Supprimer le ticket : {{ ticket.title }}">
+                                <span aria-hidden="true">🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                <p class="text-blue-900">
+                    <span aria-hidden="true">📭</span> Vous n'avez pas encore créé de demande de critique.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Section 2 : Vos critiques -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span aria-hidden="true">⭐</span> Vos critiques ({{ user_reviews.count }})
+        </h2>
+
+        {% if user_reviews %}
+            <div class="space-y-6">
+                {% for review in user_reviews %}
+                    <div class="space-y-4 bg-blue-50 border-l-4 border-blue-600 rounded-lg shadow-md p-6">
+
+                        <!-- Votre critique -->
+                        <article class="bg-white rounded-lg shadow-md p-6">
+                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+                                <div class="flex items-center gap-3">
+                                    <!-- Avatar -->
+                                    {% if user.profile_photo %}
+                                        <img
+                                            src="{{ user.profile_photo.url }}"
+                                            alt="Photo de profil de {{ user.username }}"
+                                            class="w-10 h-10 rounded-full object-cover border-2 border-gray-200">
+                                    {% else %}
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-bold"
+                                            aria-label="Avatar de {{ user.username }}">
+                                            {{ user.username|first|upper }}
+                                        </div>
+                                    {% endif %}
+
+                                    <div>
+                                        <p class="font-semibold text-blue-600">Vous</p>
+                                        <p class="text-sm text-gray-600">avez publié une critique</p>
+                                    </div>
+                                </div>
+
+                                <time datetime="{{ review.time_created|date:'Y-m-d' }}" class="text-sm text-gray-600">
+                                    {{ review.time_created|date:"d/m/Y à H:i" }}
+                                </time>
+                            </div>
+
+                            <!-- Note -->
+                            <div class="flex items-center space-x-2 mb-3">
+                                <h3 class="text-xl font-bold text-gray-900">
+                                    {{ review.headline }} -
+                                </h3>
+
+                                <div class="flex items-center" role="img" aria-label="Note : {{ review.rating }} sur 5 étoiles">
+                                    {% for i in "12345" %}
+                                        <span class="{% if forloop.counter <= review.rating %}text-yellow-500{% else %}text-gray-300{% endif %} text-xl" aria-hidden="true">★</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <p class="text-gray-700 mb-4 whitespace-pre-line">
+                                {{ review.body }}
+                            </p>
+                        </article>
+
+                        <!-- Ticket associé -->
+                        <article class="bg-gray-50 rounded-lg border-2 border-gray-300 p-6">
+                            <div class="flex items-center mb-4 gap-1">
+                                <div class="text-gray-800 text-md font-semibold">
+                                    Ticket -
+                                </div>
+                                <div class="font-bold text-gray-800">
+                                    {% if review.ticket.user == user %}
+                                        vous
+                                    {% else %}
+                                        {{ review.ticket.user.username }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                {{ review.ticket.title }}
+                            </h3>
+
+                            <p class="text-gray-700 mb-4 whitespace-pre-line">
+                                {{ review.ticket.description }}
+                            </p>
+
+                            {% if review.ticket.image %}
+                                <div class="mb-4">
+                                    <img
+                                        src="{{ review.ticket.image.url }}"
+                                        alt="Couverture du livre : {{ review.ticket.title }}"
+                                        class="w-full max-w-xs rounded-lg object-cover">
+                                </div>
+                            {% endif %}
+                        </article>
+
+                        <!-- Boutons d'action -->
+                        <div class="flex pt-4 items-center gap-4 justify-end">
+
+                            <a href="{% url 'edit_review' review.id %}"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold focus:ring-2 focus:ring-blue-300 focus:outline-none rounded-lg px-6 py-2 transition duration-200"
+                                aria-label="Modifier la critique : {{ review.headline }}">
+                                <span aria-hidden="true">✏️</span> Modifier
+                            </a>
+
+                            <button
+                                type="button"
+                                onclick="openDeleteReviewModal('{{ review.id }}', '{{ review.headline|escapejs }}')"
+                                class="bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 focus:outline-none text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
+                                aria-label="Supprimer la critique : {{ review.headline }}">
+                                <span aria-hidden="true">🗑️</span> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                <p class="text-blue-900">
+                    <span aria-hidden="true">📭</span> Vous n'avez pas encore publié de critique.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Section 3 : Critiques reçues -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span aria-hidden="true">📬</span> Critiques reçues sur vos tickets ({{ reviews_received.count }})
+        </h2>
+
+        {% if reviews_received %}
+            <div class="space-y-6">
+                {% for review in reviews_received %}
+                    <div class="space-y-4 bg-blue-50 rounded-lg border-2 border-gray-300 p-6">
+
+                        <!-- Critique reçue -->
+                        <article class="bg-white rounded-lg shadow-md p-6">
+
+                            <!-- En-tête -->
+                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+                                <div class="flex items-center gap-3">
+                                    {% if review.user.profile_photo %}
+                                        <img
+                                            src="{{ review.user.profile_photo.url }}"
+                                            alt="Photo de profil de {{ review.user.username }}"
+                                            class="w-10 h-10 rounded-full object-cover border-2 border-gray-200">
+                                    {% else %}
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold"
+                                            aria-label="Avatar de {{ review.user.username }}">
+                                            {{ review.user.username|first|upper }}
+                                        </div>
+                                    {% endif %}
+
+                                    <div>
+                                        <p class="font-semibold text-gray-900">{{ review.user.username }}</p>
+                                        <p class="text-sm text-gray-600">a répondu à votre ticket</p>
+                                    </div>
+                                </div>
+
+                                <time datetime="{{ review.time_created|date:'Y-m-d' }}" class="text-sm text-gray-600">
+                                    {{ review.time_created|date:"d/m/Y à H:i" }}
+                                </time>
+                            </div>
+
+                            <!-- Note -->
+                            <div class="flex items-center space-x-2 mb-3">
+                                <h3 class="text-xl font-bold text-gray-900">
+                                    {{ review.headline }} -
+                                </h3>
+
+                                <div class="flex items-center" role="img" aria-label="Note : {{ review.rating }} sur 5 étoiles">
+                                    {% for i in "12345" %}
+                                        <span class="{% if forloop.counter <= review.rating %}text-yellow-500{% else %}text-gray-300{% endif %} text-xl" aria-hidden="true">★</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <p class="text-gray-700 whitespace-pre-line">
+                                {{ review.body }}
+                            </p>
+                        </article>
+
+                        <!-- Votre ticket -->
+                        <article class="bg-green-50 rounded-lg border-2 border-green-300 p-6">
+                            <div class="inline-block bg-green-200 text-green-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                                <span aria-hidden="true">📖</span> Votre ticket
+                            </div>
+
+                            <h3 class="text-lg font-bold text-gray-900 mb-3">
+                                {{ review.ticket.title }}
+                            </h3>
+
+                            <p class="text-gray-700 whitespace-pre-line">
+                                {{ review.ticket.description }}
+                            </p>
+
+                            {% if review.ticket.image %}
+                                <div class="mt-4">
+                                    <img
+                                        src="{{ review.ticket.image.url }}"
+                                        alt="Couverture du livre : {{ review.ticket.title }}"
+                                        class="w-full max-w-xs rounded-lg object-cover">
+                                </div>
+                            {% endif %}
+                        </article>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                <p class="text-blue-900">
+                    <span aria-hidden="true">📭</span> Vous n'avez pas encore reçu de critique sur vos tickets.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+{% include 'blog/includes/delete_review_modal.html' %}
+{% include 'blog/includes/delete_ticket_modal.html' %}
+
+{% endblock %}

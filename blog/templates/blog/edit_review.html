@@ -1,0 +1,132 @@
+{% extends "core/base.html" %}
+{% block title %}Modifier la critique | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Modifier votre critique</h1>
+
+    <p class="text-lg text-gray-700 mb-8">
+        Critique : <span class="font-semibold">{{ review.headline }}</span>
+    </p>
+
+    <!-- Affichage des erreurs -->
+    {% if edit_form.errors %}
+        <div role="alert" class="mb-6 p-4 bg-red-100 text-red-900 rounded-lg border-l-4 border-red-700">
+            <p class="font-semibold mb-2">
+                <span aria-hidden="true">⚠️</span> Erreurs dans le formulaire :
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+                {% for field, errors in edit_form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <!-- Section 1 : Modifier le contenu -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+
+        <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+            <span aria-hidden="true">✏️</span> Modifier le contenu
+        </h2>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Champ caché pour identifier l'action -->
+            {{ edit_form.edit_review }}
+
+            <!-- Champ : Note -->
+            <fieldset class="mb-6">
+                <legend class="block text-gray-900 font-semibold mb-3">
+                    {{ edit_form.rating.label }}
+                </legend>
+                <div class="flex flex-wrap gap-3">
+                    {% for choice in edit_form.rating %}
+                        <div class="flex items-center bg-gray-100 hover:bg-blue-50 px-4 py-2 rounded-lg border-2 border-gray-300 hover:border-blue-500 transition cursor-pointer">
+                            {{ choice.tag }}
+                            <label for="{{ choice.id_for_label }}" class="ml-2 text-gray-900 cursor-pointer font-medium">
+                                {{ choice.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if edit_form.rating.errors %}
+                    <p class="mt-2 text-sm text-red-900" role="alert">
+                        {{ edit_form.rating.errors|first }}
+                    </p>
+                {% endif %}
+            </fieldset>
+
+            <!-- Champ : Titre de la critique -->
+            <div>
+                <label for="id_headline" class="block text-gray-900 font-semibold mb-2">
+                    {{ edit_form.headline.label }}
+                </label>
+                {{ edit_form.headline }}
+                {% if edit_form.headline.errors %}
+                    <p class="mt-1 text-sm text-red-900" role="alert">
+                        {{ edit_form.headline.errors|first }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Champ : Commentaire détaillé -->
+            <div>
+                <label for="id_body" class="block text-gray-900 font-semibold mb-2">
+                    {{ edit_form.body.label }}
+                </label>
+                {{ edit_form.body }}
+                {% if edit_form.body.errors %}
+                    <p class="mt-1 text-sm text-red-900" role="alert">
+                        {{ edit_form.body.errors|first }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+                <button
+                    type="submit"
+                    class="flex-1 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                    <span aria-hidden="true">💾</span> Enregistrer les modifications
+                </button>
+
+
+                <a  href="{% url 'user_posts' %}"
+                    class="flex-1 text-center bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:outline-none text-gray-900 font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Section 2 : Zone de danger -->
+    <div class="bg-red-50 rounded-lg shadow-md p-6 border-l-4 border-red-600">
+
+        <h2 class="text-2xl font-semibold text-red-900 mb-4">
+            <span aria-hidden="true">🗑️</span> Zone de danger
+        </h2>
+
+        <p class="text-red-800 mb-6">
+            <strong>Attention :</strong> La suppression de cette critique est <strong>définitive et irréversible</strong>.
+        </p>
+
+        <button
+            type="button"
+            onclick="openDeleteReviewModal('{{ review.id }}', '{{ review.headline|escapejs }}')"
+            class="bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 focus:outline-none text-white font-semibold py-2 px-6 rounded-lg transition duration-200 cursor-pointer"
+            aria-label="Supprimer la critique : {{ review.headline }}">
+            <span aria-hidden="true">🗑️</span> Supprimer cette critique
+        </button>
+    </div>
+</div>
+
+<!-- Modale de confirmation de suppression -->
+{% include 'blog/includes/delete_review_modal.html' %}
+
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "core/base.html" %}
+{% block title %}Créer une critique | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Créer une critique</h1>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+
+        <!-- Affichage des erreurs globales -->
+        {% if ticket_form.errors or review_form.errors %}
+            <div role="alert" class="mb-6 p-4 bg-red-100 text-red-900 rounded-lg border-l-4 border-red-700">
+                <p class="font-semibold mb-2">
+                    <span aria-hidden="true">⚠️</span> Erreurs dans le formulaire :
+                </p>
+                <ul class="list-disc list-inside space-y-1">
+                    {% for field, errors in ticket_form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for field, errors in review_form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Formulaire principal -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+
+            <!-- Section 1 : Informations sur le livre -->
+            <div class="pb-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+                    <span aria-hidden="true">📚</span> Livre ou article
+                </h2>
+
+                <!-- Champ : Titre -->
+                <div class="mb-4">
+                    <label for="id_title" class="block text-gray-900 font-semibold mb-2">
+                        Titre du livre/article
+                    </label>
+                    {{ ticket_form.title }}
+                    {% if ticket_form.title.errors %}
+                        <p class="mt-1 text-sm text-red-900" role="alert">
+                            {{ ticket_form.title.errors|first }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Champ : Description -->
+                <div class="mb-4">
+                    <label for="id_description" class="block text-gray-900 font-semibold mb-2">
+                        Description
+                    </label>
+                    {{ ticket_form.description }}
+                    <p id="description-help" class="mt-1 text-sm text-gray-700">
+                        Présentez brièvement le livre ou l'article.
+                    </p>
+                    {% if ticket_form.description.errors %}
+                        <p class="mt-1 text-sm text-red-900" role="alert">
+                            {{ ticket_form.description.errors}}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Champ : Image (optionnel) -->
+                <div>
+                    <label for="id_image" class="block text-gray-900 font-semibold mb-2">
+                        Image de couverture <span class="font-normal text-gray-600">(optionnel)</span>
+                    </label>
+                    {{ ticket_form.image }}
+                    <p id="image-help" class="mt-1 text-sm text-gray-700">
+                        Ajoutez une image de la couverture du livre.
+                    </p>
+                    {% if ticket_form.image.errors %}
+                        <p class="mt-1 text-sm text-red-900" role="alert">
+                            {{ ticket_form.image.errors|first }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Section 2 : Votre critique -->
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+                    <span aria-hidden="true">✍️</span> Votre critique
+                </h2>
+
+                <!-- Champ : Note (radio buttons) -->
+                <fieldset class="mb-6">
+                    <legend class="block text-gray-900 font-semibold mb-3">
+                        Note
+                    </legend>
+                    <div class="flex flex-wrap gap-3">
+                        {% for choice in review_form.rating %}
+                            <div class="flex items-center bg-gray-100 hover:bg-blue-50 px-4 py-2 rounded-lg border-2 border-gray-300 hover:border-blue-500 transition cursor-pointer">
+                                {{ choice.tag }}
+                                <label for="{{ choice.id_for_label }}" class="ml-2 text-gray-900 cursor-pointer font-medium">
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if review_form.rating.errors %}
+                        <p class="mt-2 text-sm text-red-900" role="alert">
+                            {{ review_form.rating.errors|first }}
+                        </p>
+                    {% endif %}
+                </fieldset>
+
+                <!-- Champ : Titre de la critique -->
+                <div class="mb-4">
+                    <label for="id_headline" class="block text-gray-900 font-semibold mb-2">
+                        Titre de votre critique
+                    </label>
+                    {{ review_form.headline }}
+                    {% if review_form.headline.errors %}
+                        <p class="mt-1 text-sm text-red-900" role="alert">
+                            {{ review_form.headline.errors|first }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Champ : Commentaire détaillé -->
+                <div>
+                    <label for="id_body" class="block text-gray-900 font-semibold mb-2">
+                        Votre avis détaillé
+                    </label>
+                    {{ review_form.body }}
+                    <p id="body-help" class="mt-1 text-sm text-gray-700">
+                        Développez votre critique avec vos arguments et impressions.
+                    </p>
+                    {% if review_form.body.errors %}
+                        <p class="mt-1 text-sm text-red-900" role="alert">
+                            {{ review_form.body.errors|first }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+                <button
+                    type="submit"
+                    class="flex-1 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                    Publier la critique
+                </button>
+
+
+                <a  href="{% url 'feed' %}"
+                    class="flex-1 text-center bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:outline-none text-gray-900 font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                    Annuler
+                </a>
+            </div>
+        </form>
+
+        <!-- Conseil utilisateur -->
+        <div class="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-600">
+            <p class="text-sm text-blue-900">
+                <strong><span aria-hidden="true">💡</span> Astuce :</strong> Ce formulaire vous permet de créer à la fois le billet (informations sur le livre) et votre critique en une seule fois.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

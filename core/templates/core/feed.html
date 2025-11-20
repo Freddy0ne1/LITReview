@@ -1,0 +1,231 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Flux | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <!-- En-tête du flux -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Votre flux</h1>
+        <p class="text-lg text-blue-700 font-semibold">
+            Bienvenue {{ user.username }} !
+        </p>
+    </div>
+
+    <!-- Boutons d'action principaux -->
+    <div class="flex flex-wrap gap-4 mb-8">
+        <a href="{% url 'ticket_review_create' %}" class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-2 px-6 rounded-lg transition duration-200 cursor-pointer">
+            <span aria-hidden="true">📝</span> Créer une critique
+        </a>
+
+        <a href="{% url 'ticket_create' %}" class="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 focus:outline-none text-white font-semibold py-2 px-6 rounded-lg transition duration-200 cursor-pointer">
+            <span aria-hidden="true">💬</span> Demander une critique
+        </a>
+    </div>
+
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Dernières publications</h2>
+
+    {% if posts %}
+        <div class="space-y-6">
+            {% for post in posts %}
+
+                <!-- Ticket -->
+                {% if post.content_type == 'TICKET' %}
+                    <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+
+                        <!-- En-tête : auteur et date -->
+                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+                            <div class="flex items-center gap-3">
+                                <!-- Avatar -->
+                                {% if post.user.profile_photo %}
+                                    <img
+                                        src="{{ post.user.profile_photo.url }}"
+                                        alt="Photo de profil de {{ post.user.username }}"
+                                        class="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                                    >
+                                {% else %}
+                                    <img src="{% static 'images/default_profile.png' %}"
+                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         class="w-10 h-10 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                                         aria-label="Avatar de {{ user.username }}">
+                                {% endif %}
+
+                                <div>
+                                    {% if post.user == user %}
+                                        <p class="font-semibold text-blue-600">Vous</p>
+                                        <p class="text-sm text-gray-600">avez demandé une critique</p>
+                                    {% else %}
+                                        <p class="font-semibold text-gray-900">{{ post.user.username }}</p>
+                                        <p class="text-sm text-gray-600">a demandé une critique</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <time datetime="{{ post.time_created|date:'Y-m-d' }}" class="text-sm text-gray-600">
+                                {{ post.time_created|date:"d/m/Y à H:i" }}
+                            </time>
+                        </div>
+
+                        <!-- Badge -->
+                        <div class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                            <span aria-hidden="true">💬</span> Demande de critique
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">
+                            {{ post.title }}
+                        </h3>
+
+                        <p class="text-gray-700 mb-4 whitespace-pre-line">
+                            {{ post.description }}
+                        </p>
+
+                        <!-- Image -->
+                        {% if post.image %}
+                            <div class="mb-4">
+                                <img
+                                    src="{{ post.image.url }}"
+                                    alt="Couverture du livre {{ post.title }}"
+                                    class="w-full max-w-sm rounded-lg object-cover"
+                                >
+                            </div>
+                        {% endif %}
+
+                        <!-- Actions -->
+                        <div class="pt-4 border-t border-gray-200">
+                            {% if post.is_blocked %}
+                                <p class="text-gray-500 text-sm italic">
+                                    <span aria-hidden="true">🚫</span> Vous ne pouvez pas répondre à ce ticket
+                                </p>
+                            {% elif post.user_review %}
+                                <div class="flex items-center gap-3 text-sm justify-end">
+                                    <span class="text-green-600 font-semibold"><span aria-hidden="true">✓</span> Critique publiée</span>
+                                    <span class="text-gray-400" aria-hidden="true">•</span>
+                                    <a href="{% url 'edit_review' post.user_review.id %}" class="bg-blue-600 text-white hover:bg-blue-700 font-semibold border border-blue-500 focus:ring-2 focus:ring-blue-300 focus:outline-none rounded-md px-6 py-2">
+                                        <span aria-hidden="true">✏️</span> Modifier ma critique
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="flex items-center gap-3 text-sm justify-end">
+                                    <a href="{% url 'review_create' post.id %}" class="bg-blue-600 text-white hover:bg-blue-700 font-semibold border border-blue-600 focus:ring-2 focus:ring-blue-300 focus:outline-none rounded-md px-6 py-2">
+                                        Créer une critique
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+
+                <!-- Critique -->
+                {% elif post.content_type == 'REVIEW' %}
+                    <article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+
+                        <!-- En-tête : auteur et date -->
+                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+                            <div class="flex items-center gap-3">
+                                {% if post.user.profile_photo %}
+                                    <img
+                                        src="{{ post.user.profile_photo.url }}"
+                                        alt="Photo de profil de {{ post.user.username }}"
+                                        class="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                                    >
+                                {% else %}
+                                    <img src="{% static 'images/default_profile.png' %}"
+                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         class="w-10 h-10 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                                         aria-label="Avatar de {{ user.username }}">
+                                {% endif %}
+
+                                <div>
+                                    {% if post.user == user %}
+                                        <p class="font-semibold text-blue-600">Vous</p>
+                                        <p class="text-sm text-gray-600">avez publié une critique</p>
+                                    {% else %}
+                                        <p class="font-semibold text-gray-900">{{ post.user.username }}</p>
+                                        <p class="text-sm text-gray-600">a publié une critique</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <time datetime="{{ post.time_created|date:'Y-m-d' }}" class="text-sm text-gray-600">
+                                {{ post.time_created|date:"d/m/Y à H:i" }}
+                            </time>
+                        </div>
+
+                        <!-- Badge -->
+                        <div class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                            <span aria-hidden="true">⭐</span> Critique
+                        </div>
+
+                        <!-- Note et titre -->
+                        <div class="flex items-center gap-3 mb-3">
+                            <h3 class="text-xl font-bold text-gray-900">
+                                {{ post.headline }}
+                            </h3>
+
+                            <div class="flex items-center" role="img" aria-label="Note : {{ post.rating }} étoiles sur 5">
+                                {% for i in "12345" %}
+                                    <span aria-hidden="true" class="{% if forloop.counter <= post.rating %}text-yellow-500{% else %}text-gray-300{% endif %} text-xl">★</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <p class="text-gray-700 mb-4 whitespace-pre-line">
+                            {{ post.body }}
+                        </p>
+
+                        <!-- Ticket associé -->
+                        <div class="bg-gray-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                            <p class="text-md text-gray-600 mb-2">Ticket - {{ post.ticket.user.username }}</p>
+
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1">{{ post.ticket.title }}</h4>
+
+                                {% if post.ticket.description %}
+                                    <p class="text-md text-gray-700 mt-2 line-clamp-2 mb-2">
+                                        {{ post.ticket.description|truncatewords:20 }}
+                                    </p>
+                                {% endif %}
+
+                                {% if post.ticket.image %}
+                                    <img
+                                        src="{{ post.ticket.image.url }}"
+                                        alt="Couverture du livre {{ post.ticket.title }}"
+                                        class="w-40 h-64 object-cover rounded-lg shadow-md"
+                                    >
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <!-- Message si flux vide -->
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+            <div class="flex items-start gap-3">
+                <span class="text-2xl" aria-hidden="true">📭</span>
+                <div>
+                    <p class="font-semibold text-blue-900 mb-2">Votre flux est vide</p>
+                    <p class="text-blue-800 mb-4">
+                        Commencez par suivre d'autres utilisateurs ou créez votre première publication !
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="{% url 'ticket_review_create' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer focus:ring-4 focus:ring-blue-300 focus:outline-none">
+                            Créer une critique
+                        </a>
+                        {% if not has_following %}
+                            <a href="{% url 'subscriptions' %}" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer focus:ring-4 focus:ring-gray-400 focus:outline-none">
+                                Suivre des utilisateurs
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

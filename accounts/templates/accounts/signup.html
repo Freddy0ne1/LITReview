@@ -1,0 +1,112 @@
+{% extends "core/base.html" %}
+{% block title %}S'inscrire à LITReview | La critique collaborative{% endblock %}
+
+{% block content %}
+
+<div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6 text-center">Inscription</h1>
+
+  <!-- Formulaire d'inscription
+       method="POST" : Envoie les données au serveur de manière sécurisée
+       novalidate : Désactive la validation HTML5 native pour utiliser uniquement Django
+       class="space-y-4" : Espacement vertical entre les champs -->
+  <form method="POST" novalidate class="space-y-4">
+
+    <!-- Token de sécurité Django (obligatoire pour tous les formulaires POST)
+         Protège contre les attaques CSRF (Cross-Site Request Forgery) -->
+    {% csrf_token %}
+
+    <!-- Champ : Nom d'utilisateur -->
+    <div>
+
+      <label for="id_username" class="block text-gray-900 font-semibold mb-2">
+        Nom d'utilisateur
+        <!-- Astérisque rouge pour indiquer un champ obligatoire -->
+        <span class="text-red-600" aria-label="obligatoire">*</span>
+      </label>
+
+
+      {{ form.username }}
+
+      <!-- Message d'aide contextuelle -->
+      <p id="username_help" class="mt-1 text-xs text-gray-600">
+        Max 150 caractères (lettres, chiffres, @/./+/-/_ uniquement)
+      </p>
+
+      <!-- Affichage des erreurs de validation Django -->
+      {% if form.username.errors %}
+      <p role="alert" class="mt-1 text-sm text-red-900">
+        {{ form.username.errors|first }}
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- Champ : Mot de passe -->
+    <div>
+      <label for="id_password1" class="block text-gray-900 font-semibold mb-2">
+        Mot de passe
+        <span class="text-red-600" aria-label="obligatoire">*</span>
+      </label>
+
+      {{ form.password1 }}
+
+      <!-- Aide pour les critères de sécurité du mot de passe -->
+      <p id="password1_help" class="mt-1 text-xs text-gray-600">
+        Min 8 caractères, pas trop courant
+      </p>
+
+      {% if form.password1.errors %}
+      <p role="alert" class="mt-1 text-sm text-red-900">
+        {{ form.password1.errors|first }}
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- Champ : Confirmation du mot de passe -->
+    <div>
+      <label for="id_password2" class="block text-gray-900 font-semibold mb-2">
+        Confirmer le mot de passe
+        <span class="text-red-600" aria-label="obligatoire">*</span>
+      </label>
+
+      {{ form.password2 }}
+
+      <p id="password2_help" class="mt-1 text-xs text-gray-600">
+        Saisissez le même mot de passe
+      </p>
+
+      {% if form.password2.errors %}
+      <p role="alert" class="mt-1 text-sm text-red-900">
+        {{ form.password2.errors|first }}
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- Bouton de soumission du formulaire
+         type="submit" : Envoie le formulaire -->
+    <button
+      type="submit"
+      class="w-full bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-4 rounded-lg transition duration-200 cursor-pointer"
+    >
+      S'inscrire
+    </button>
+  </form>
+
+  <!-- Lien vers la connexion pour utilisateurs existants -->
+  <p class="mt-6 text-center text-gray-900">
+    Déjà membre ?
+
+     <a href="{% url 'login' %}"
+      class="text-blue-600 hover:text-blue-700 underline focus:ring-2 focus:ring-blue-300 focus:outline-none rounded px-1"
+    >
+      Connectez-vous
+    </a>
+  </p>
+
+  <!-- Légende pour expliquer la signification de l'astérisque -->
+  <p class="mt-4 text-xs text-gray-600 text-center">
+    <span class="text-red-600">*</span> Champs obligatoires
+  </p>
+</div>
+
+{% endblock content %}

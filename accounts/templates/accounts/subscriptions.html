@@ -1,0 +1,232 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Abonnements | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Abonnements</h1>
+
+    <!-- Section 1 : Barre de recherche -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            Suivre un utilisateur
+        </h2>
+
+        <form method="POST" class="bg-white rounded-lg shadow-md p-6">
+            {% csrf_token %}
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <!-- Champ de recherche -->
+                <div class="flex-1">
+                    <label for="username" class="block text-gray-900 font-semibold mb-2">
+                        Nom d'utilisateur
+                    </label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Entrez le nom d'utilisateur"
+                        required
+                        autocomplete="off"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <!-- Bouton de soumission -->
+                <div class="flex items-end">
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-8 rounded-lg transition duration-200 cursor-pointer">
+                        Envoyer
+                    </button>
+                </div>
+            </div>
+
+            <p class="mt-3 text-sm text-gray-600">
+                <span aria-hidden="true">💡</span> Astuce : La recherche est insensible à la casse (majuscules/minuscules)
+            </p>
+        </form>
+    </section>
+
+    <!-- Section 2 : Abonnements -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            Abonnements ({{ following_count }})
+        </h2>
+
+        {% if following %}
+            <div class="space-y-4">
+                {% for follow in following %}
+                    <article class="bg-white rounded-lg shadow-md p-4 flex items-center justify-between hover:shadow-lg transition-shadow duration-200">
+
+                        <!-- Informations utilisateur -->
+                        <div class="flex items-center gap-3">
+                            {% if follow.followed_user.profile_photo %}
+                                <img
+                                    src="{{ follow.followed_user.profile_photo.url }}"
+                                    alt="Photo de profil de {{ follow.followed_user.username }}"
+                                    class="w-12 h-12 rounded-full object-cover border-2 border-gray-200">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.png' %}"
+                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                                         aria-label="Avatar de {{ user.username }}">
+                            {% endif %}
+
+                            <div>
+                                <p class="font-semibold text-gray-900 text-lg">
+                                    {{ follow.followed_user.username }}
+                                </p>
+                                {% if follow.followed_user.role %}
+                                    <p class="text-sm text-gray-600">
+                                        {{ follow.followed_user.get_role_display }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="flex gap-2">
+                            <button
+                                type="button"
+                                onclick="openUnfollowModal('{{ follow.followed_user.id }}', '{{ follow.followed_user.username }}')"
+                                class="bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 focus:outline-none text-white font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
+                                aria-label="Se désabonner de {{ follow.followed_user.username }}">
+                                <span aria-hidden="true">👋</span> Se désabonner
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick="openBlockModal('{{ follow.followed_user.id }}', '{{ follow.followed_user.username }}')"
+                                class="bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none text-white font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
+                                aria-label="Bloquer {{ follow.followed_user.username }}">
+                                <span aria-hidden="true">🚫</span> Bloquer
+                            </button>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                <p class="text-blue-900">
+                    <span aria-hidden="true">📭</span> Vous ne suivez personne pour le moment. Utilisez la barre de recherche ci-dessus pour trouver des utilisateurs !
+                </p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Section 3 : Abonnés -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            Abonnés ({{ followers_count }})
+        </h2>
+
+        {% if followers %}
+            <div class="space-y-4">
+                {% for follow in followers %}
+                    <article class="bg-white rounded-lg shadow-md p-4 flex items-center gap-3 hover:shadow-lg transition-shadow duration-200">
+
+                        {% if follow.user.profile_photo %}
+                            <img
+                                src="{{ follow.user.profile_photo.url }}"
+                                alt="Photo de profil de {{ follow.user.username }}"
+                                class="w-12 h-12 rounded-full object-cover border-2 border-gray-200">
+                        {% else %}
+                            <img src="{% static 'images/default_profile.png' %}"
+                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                                         aria-label="Avatar de {{ user.username }}">
+                        {% endif %}
+
+                        <div>
+                            <p class="font-semibold text-gray-900 text-lg">
+                                {{ follow.user.username }}
+                            </p>
+                            {% if follow.user.role %}
+                                <p class="text-sm text-gray-600">
+                                    {{ follow.user.get_role_display }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                <p class="text-blue-900">
+                    <span aria-hidden="true">📭</span> Personne ne vous suit pour le moment.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Section 4 : Utilisateurs bloqués -->
+    <section class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">
+                Utilisateurs bloqués
+            </h2>
+
+            <a  href="{% url 'blocked_users' %}"
+                class="text-blue-600 hover:text-blue-700 font-semibold focus:ring-2 focus:ring-blue-300 focus:outline-none rounded px-2 cursor-pointer">
+                Voir tous ({{ blocked_count }}) <span aria-hidden="true">→</span>
+            </a>
+        </div>
+
+        {% if blocked_users_preview %}
+            <div class="space-y-4">
+                {% for block in blocked_users_preview %}
+                    <article class="bg-white rounded-lg shadow-md p-4 flex items-center justify-between hover:shadow-lg transition-shadow duration-200">
+
+                        <!-- Informations utilisateur bloqué -->
+                        <div class="flex items-center gap-3">
+                            {% if block.blocked_user.profile_photo %}
+                                <img
+                                    src="{{ block.blocked_user.profile_photo.url }}"
+                                    alt="Photo de profil de {{ block.blocked_user.username }}"
+                                    class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 grayscale">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.png' %}"
+                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                                         aria-label="Avatar de {{ user.username }}">
+                            {% endif %}
+
+                            <div>
+                                <p class="font-semibold text-gray-900 text-lg">
+                                    {{ block.blocked_user.username }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    Bloqué le <time datetime="{{ block.created_at|date:'Y-m-d' }}">{{ block.created_at|date:"d/m/Y" }}</time>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Bouton Débloquer -->
+                        <button
+                            type="button"
+                            onclick="openUnblockModal('{{ block.blocked_user.id }}', '{{ block.blocked_user.username }}')"
+                            class="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 focus:outline-none text-white font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
+                            aria-label="Débloquer {{ block.blocked_user.username }}">
+                            <span aria-hidden="true">🔓</span> Débloquer
+                        </button>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
+                <p class="text-blue-900">
+                    <span aria-hidden="true">✅</span> Vous n'avez bloqué aucun utilisateur.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+<!-- Modales de confirmation -->
+{% include "accounts/includes/unfollow_modal.html" %}
+{% include "accounts/includes/block_modal.html" %}
+{% include 'accounts/includes/unblock_modal.html' %}
+
+{% endblock %}

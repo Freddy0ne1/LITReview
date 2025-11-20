@@ -1,0 +1,65 @@
+{% extends "core/base.html" %}
+{% block title %}Se connecter à LITReview | La critique collaborative{% endblock %}
+
+{% block content %}
+
+<div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6 text-center">Connexion</h1>
+
+  <!-- Formulaire de connexion -->
+  <form method="POST" novalidate class="space-y-4">
+    {% csrf_token %}
+
+    <!-- Champ : Nom d'utilisateur -->
+    <div>
+      <label for="id_username" class="block text-gray-900 font-semibold mb-2">
+        Nom d'utilisateur
+        <span class="text-red-600" aria-label="obligatoire">*</span>
+      </label>
+      {{ form.username }} {% if form.username.errors %}
+      <p role="alert" class="mt-1 text-sm text-red-900">
+        {{ form.username.errors|first }}
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- Champ : Mot de passe -->
+    <div>
+      <label for="id_password" class="block text-gray-900 font-semibold mb-2">
+        Mot de passe
+        <span class="text-red-600" aria-label="obligatoire">*</span>
+      </label>
+      {{ form.password }} {% if form.password.errors %}
+      <p role="alert" class="mt-1 text-sm text-red-900">
+        {{ form.password.errors|first }}
+      </p>
+      {% endif %}
+    </div>
+
+    <!-- Bouton de soumission -->
+    <button
+      type="submit"
+      class="w-full bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-4 rounded-lg transition duration-200 cursor-pointer"
+    >
+      Se connecter
+    </button>
+  </form>
+
+  <!-- Lien vers inscription -->
+  <p class="mt-6 text-center text-gray-900">
+    Pas encore membre ?
+    <a
+      href="{% url 'signup' %}"
+      class="text-blue-600 hover:text-blue-700 underline focus:ring-2 focus:ring-blue-300 focus:outline-none rounded px-1 font-semibold"
+    >
+      Inscrivez-vous maintenant !
+    </a>
+  </p>
+
+  <!-- Légende -->
+  <p class="mt-4 text-xs text-gray-600 text-center">
+    <span class="text-red-600">*</span> Champs obligatoires
+  </p>
+</div>
+
+{% endblock content %}

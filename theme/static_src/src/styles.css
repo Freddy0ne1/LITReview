@@ -1,0 +1,108 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/**
+  * A catch-all path to Django template files, JavaScript, and Python files
+  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
+  *
+  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
+  * the scope of this path.
+  */
+@source "../../../**/*.{html,py,js}";
+/* ========================================
+   FORMULAIRE : Upload de photo de profil
+   ======================================== */
+
+/* Wrapper checkbox + label sur la même ligne */
+#photo-clear-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Checkbox "Supprimer" */
+input[name="profile_photo-clear"] {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    accent-color: #dc2626; /* Rouge */
+    margin: 0;
+}
+
+/* Label "Supprimer" en rouge */
+label[for="profile_photo-clear_id"] {
+    color: #dc2626;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Hover rouge plus foncé */
+label[for="profile_photo-clear_id"]:hover {
+    color: #b91c1c;
+}
+
+/* Lien "Actuellement" en bleu */
+.clearable-file-input a {
+    color: #2563eb;
+    text-decoration: underline;
+    font-size: 0.875rem;
+}
+
+/* Input file stylisé */
+input[type="file"] {
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    color: #111827;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: #f9fafb;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+}
+
+/* Classes pour le skip link (accessibilité) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* Empêche le scroll quand une modale est ouverte */
+body.modal-open {
+    overflow: hidden;
+    /* Optionnel : compenser la scrollbar pour éviter le saut */
+    padding-right: 0;
+}
+
+/* Si vous voulez compenser la scrollbar automatiquement */
+@supports (scrollbar-gutter: stable) {
+    body {
+        scrollbar-gutter: stable;
+    }
+}

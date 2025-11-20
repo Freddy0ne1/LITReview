@@ -1,0 +1,84 @@
+{% extends "core/base.html" %}
+{% block title %}Modifier ma photo | LITReview{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<div class="max-w-md mx-auto">
+
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Modifier ma photo de profil</h1>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+
+        <!-- Aperçu de la photo actuelle -->
+        <figure class="flex flex-col items-center mb-6">
+            {% if user.profile_photo %}
+                <img
+                    src="{{ user.profile_photo.url }}"
+                    alt="Photo de profil actuelle de {{ user.username }}"
+                    class="w-32 h-32 rounded-full object-cover border-4 border-gray-200 mb-2">
+                <figcaption class="text-sm text-gray-600 mt-2">Photo actuelle</figcaption>
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}"
+                     alt="Photo de profil par défaut de {{ user.username }}"
+                     class="w-32 h-32 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                     aria-label="Avatar de {{ user.username }}">
+                <figcaption class="text-sm text-gray-600 mt-2">Aucune photo</figcaption>
+            {% endif %}
+        </figure>
+
+        <!-- Formulaire -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="mb-4">
+                <label for="id_profile_photo" class="block text-gray-900 font-semibold mb-2">
+                    Photo de profil
+                </label>
+
+                {{ form.profile_photo }}
+
+                <p class="mt-1 text-sm text-gray-600">
+                    Formats acceptés : JPG, PNG, GIF. Taille max : 5 Mo.
+                </p>
+
+                {% if form.profile_photo.errors %}
+                    <p class="mt-1 text-sm text-red-900" role="alert">
+                        {{ form.profile_photo.errors|first }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button
+                    type="submit"
+                    class="flex-1 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer">
+                    <span aria-hidden="true">💾</span> Enregistrer
+                </button>
+
+
+                <a href="{% url 'profile' %}"
+                    class="flex-1 text-center bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:outline-none text-gray-900 font-semibold py-2 px-4 rounded-lg transition duration-200 cursor-pointer">
+                    Annuler
+                </a>
+            </div>
+        </form>
+
+        <!-- Astuce suppression -->
+        {% if user.profile_photo %}
+        <div class="mt-6 p-3 bg-orange-50 rounded border-l-4 border-orange-600">
+            <p class="text-sm text-orange-900">
+                <strong><span aria-hidden="true">💡</span> Astuce :</strong> Pour supprimer votre photo, cochez la case "Effacer" et cliquer sur enregistrer.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Script pour la gestion de la checkbox photo -->
+<script src="{% static 'js/profile-photo.js' %}" defer></script>
+{% endblock %}

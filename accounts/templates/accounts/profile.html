@@ -1,0 +1,91 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Mon profil | LITReview{% endblock %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Mon profil</h1>
+
+    <!-- Carte principale du profil -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+
+        <!-- Photo de profil -->
+        <div class="flex flex-col items-center mb-6 pb-6 border-b border-gray-200">
+
+            {% if user.profile_photo %}
+                <img
+                    src="{{ user.profile_photo.url }}"
+                    alt="Photo de profil de {{ user.username }}"
+                    class="w-32 h-32 rounded-full object-cover border-4 border-gray-200 mb-4">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}"
+                     alt="Photo de profil par défaut de {{ user.username }}"
+                     class="w-32 h-32 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
+                     aria-label="Avatar de {{ user.username }}">
+            {% endif %}
+
+            <!-- Lien pour modifier la photo -->
+
+            <a href="{% url 'edit_profile' %}"
+                class="text-blue-600 hover:text-blue-700 underline focus:ring-2 focus:ring-blue-300 focus:outline-none rounded px-2 font-semibold cursor-pointer">
+                <span aria-hidden="true">📷</span> Modifier ma photo
+            </a>
+        </div>
+
+        <!-- Informations du compte -->
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Informations du compte</h2>
+
+        <dl class="space-y-4">
+            <!-- Nom d'utilisateur -->
+            <div>
+                <dt class="text-gray-900 font-semibold">Nom d'utilisateur :</dt>
+                <dd class="text-gray-900">{{ user.username }}</dd>
+            </div>
+
+            <!-- Email (si disponible) -->
+            {% if user.email %}
+            <div>
+                <dt class="text-gray-900 font-semibold">Email :</dt>
+                <dd class="text-gray-900">{{ user.email }}</dd>
+            </div>
+            {% endif %}
+
+            <!-- Date d'inscription -->
+            <div>
+                <dt class="text-gray-900 font-semibold">Membre depuis :</dt>
+                <dd class="text-gray-900">
+                    <time datetime="{{ user.date_joined|date:'Y-m-d' }}">
+                        {{ user.date_joined|date:"d F Y" }}
+                    </time>
+                </dd>
+            </div>
+        </dl>
+
+        <hr class="my-6">
+
+        <!-- Section sécurité -->
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Sécurité</h2>
+
+        <!-- Boutons d'action -->
+        <div class="flex flex-col sm:flex-row gap-4">
+            <!-- Modifier le mot de passe -->
+
+             <a href="{% url 'change_password' %}"
+                class="flex-1 text-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none text-white font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                <span aria-hidden="true">🔐</span> Modifier mon mot de passe
+            </a>
+
+            <!-- Retour au flux -->
+
+            <a  href="{% url 'feed' %}"
+                class="flex-1 text-center bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 focus:outline-none text-gray-900 font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
+                <span aria-hidden="true">🏠</span> Retour au flux
+            </a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
