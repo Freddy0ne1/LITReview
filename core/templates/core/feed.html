@@ -47,17 +47,17 @@
                                     >
                                 {% else %}
                                     <img src="{% static 'images/default_profile.png' %}"
-                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         alt="Photo de profil par défaut de {{ post.user.username }}"
                                          class="w-10 h-10 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
-                                         aria-label="Avatar de {{ user.username }}">
+                                         aria-label="Avatar de {{ post.user.username }}">
                                 {% endif %}
 
                                 <div>
                                     {% if post.user == user %}
-                                        <p class="font-semibold text-blue-600">Vous</p>
+                                        <p class="font-semibold text-green-600">Vous</p>
                                         <p class="text-sm text-gray-600">avez demandé une critique</p>
                                     {% else %}
-                                        <p class="font-semibold text-gray-900">{{ post.user.username }}</p>
+                                        <p class="font-semibold text-green-600">{{ post.user.username }}</p>
                                         <p class="text-sm text-gray-600">a demandé une critique</p>
                                     {% endif %}
                                 </div>
@@ -131,9 +131,9 @@
                                     >
                                 {% else %}
                                     <img src="{% static 'images/default_profile.png' %}"
-                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         alt="Photo de profil par défaut de {{ post.user.username }}"
                                          class="w-10 h-10 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
-                                         aria-label="Avatar de {{ user.username }}">
+                                         aria-label="Avatar de {{ post.user.username }}">
                                 {% endif %}
 
                                 <div>
@@ -141,7 +141,7 @@
                                         <p class="font-semibold text-blue-600">Vous</p>
                                         <p class="text-sm text-gray-600">avez publié une critique</p>
                                     {% else %}
-                                        <p class="font-semibold text-gray-900">{{ post.user.username }}</p>
+                                        <p class="font-semibold text-blue-600">{{ post.user.username }}</p>
                                         <p class="text-sm text-gray-600">a publié une critique</p>
                                     {% endif %}
                                 </div>

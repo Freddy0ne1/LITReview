@@ -69,9 +69,9 @@
                                     class="w-12 h-12 rounded-full object-cover border-2 border-gray-200">
                             {% else %}
                                 <img src="{% static 'images/default_profile.png' %}"
-                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         alt="Photo de profil par défaut de {{ follow.followed_user.username }}"
                                          class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
-                                         aria-label="Avatar de {{ user.username }}">
+                                         aria-label="Avatar de {{ follow.followed_user.username }}">
                             {% endif %}
 
                             <div>
@@ -134,9 +134,9 @@
                                 class="w-12 h-12 rounded-full object-cover border-2 border-gray-200">
                         {% else %}
                             <img src="{% static 'images/default_profile.png' %}"
-                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         alt="Photo de profil par défaut de {{ follow.user.username }}"
                                          class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
-                                         aria-label="Avatar de {{ user.username }}">
+                                         aria-label="Avatar de {{ follow.user.username }}">
                         {% endif %}
 
                         <div>
@@ -188,9 +188,9 @@
                                     class="w-12 h-12 rounded-full object-cover border-2 border-gray-200 grayscale">
                             {% else %}
                                 <img src="{% static 'images/default_profile.png' %}"
-                                         alt="Photo de profil par défaut de {{ user.username }}"
+                                         alt="Photo de profil par défaut de {{ block.blocked_user.username }}"
                                          class="w-12 h-12 rounded-full object-cover border-2 border-gray-300 hover:border-green-500 transition duration-200"
-                                         aria-label="Avatar de {{ user.username }}">
+                                         aria-label="Avatar de {{ block.blocked_user.username }}">
                             {% endif %}
 
                             <div>
